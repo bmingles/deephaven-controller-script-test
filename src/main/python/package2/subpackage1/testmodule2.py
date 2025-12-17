@@ -1,2 +1,2 @@
 def test():
-    print("Controller sourced")
+    print("Controller sourced module 2")
