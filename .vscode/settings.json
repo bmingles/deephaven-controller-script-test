@@ -1,0 +1,5 @@
+{
+  "deephaven.enterpriseServers": [
+    "https://bmingles-remote-file-source.int.illumon.com:8123"
+  ]
+}

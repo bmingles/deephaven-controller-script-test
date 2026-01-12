@@ -3,5 +3,5 @@ controller_import.meta_import()
 import controller.package2.subpackage1.testmodule1
 
 def test():
-  print("Controller sourced package1.subpackage1.testmodule1")
+  print("Local Sourced package1.subpackage1.testmodule1")
   controller.package2.subpackage1.testmodule1.test()
