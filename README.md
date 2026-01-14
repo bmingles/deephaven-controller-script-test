@@ -13,6 +13,8 @@ https://deephaven.io/enterprise/docs/query-management/git/
 
 - Install a version of the Deephaven extension that supports Groovy remote file source plugin.
 
+[vscode-deephaven-1.0.10-remote.0.vsix](https://github.com/deephaven/vscode-deephaven/raw/4d810c2a184039236292eb5cabee6b366ed14a3c/releases/vscode-deephaven-1.0.10-remote.0.vsix)
+
 ## Running Test Scripts
 
 - Clone this repo and checkout the `local` branch.
