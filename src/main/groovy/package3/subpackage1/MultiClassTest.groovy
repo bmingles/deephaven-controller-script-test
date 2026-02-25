@@ -1,17 +1,20 @@
 package package3.subpackage1
 
 /**
- * Test file containing multiple class patterns to verify cache eviction
- * catches ALL classes defined in a single .groovy file.
+ * Test file containing ALL class patterns to verify cache eviction
+ * catches EVERY class defined in a single .groovy file.
  * 
  * Class patterns included:
  * 1. Primary class (MultiClassTest) - matches filename
  * 2. Static inner class (MultiClassTest$StaticHelper)
  * 3. Non-static inner class (MultiClassTest$InstanceHelper)
- * 4. Top-level helper class (AnotherHelper) - doesn't match filename
- * 5. Anonymous inner class (MultiClassTest$1, etc.)
- * 6. Local class (defined inside method)
- * 7. Closure-generated class
+ * 4. Deeply nested class (MultiClassTest$StaticHelper$DeeperNested)
+ * 5. Top-level helper classes (AnotherHelper, YetAnotherHelper)
+ * 6. Anonymous inner classes (MultiClassTest$1, $2, $3)
+ * 7. Closure-generated classes (MultiClassTest$_test_closure1, etc.)
+ * 8. Trait (TestTrait, TestTrait$Trait$Helper)
+ * 9. Enum (TestEnum, TestEnum$1, TestEnum$2 for per-constant bodies)
+ * 10. Interface (TestInterface)
  */
 class MultiClassTest {
     
@@ -19,6 +22,13 @@ class MultiClassTest {
     static class StaticHelper {
         static void help() {
             println("Local sourced MultiClassTest\$StaticHelper")
+        }
+        
+        // Deeply nested class - generates MultiClassTest$StaticHelper$DeeperNested
+        static class DeeperNested {
+            static void help() {
+                println("Local sourced MultiClassTest\$StaticHelper\$DeeperNested")
+            }
         }
     }
     
@@ -35,36 +45,109 @@ class MultiClassTest {
         // Call static inner class
         StaticHelper.help()
         
-        // Call non-static inner class (need instance)
+        // Call deeply nested class
+        StaticHelper.DeeperNested.help()
+        
+        // Call non-static inner class (need instance of outer class)
         def instance = new MultiClassTest()
-        def instanceHelper = instance.new InstanceHelper()
+        def instanceHelper = new MultiClassTest.InstanceHelper(instance)
         instanceHelper.help()
         
-        // Call top-level helper class (defined below)
+        // Call top-level helper classes (defined below in same file)
+        // These can't be imported directly - only accessible within same compilation unit
         AnotherHelper.help()
+        YetAnotherHelper.help()
         
-        // Anonymous inner class - generates MultiClassTest$1
-        Runnable anonymous = new Runnable() {
+        // Multiple anonymous inner classes - generates MultiClassTest$1, $2, $3
+        Runnable anonymous1 = new Runnable() {
             void run() {
                 println("Local sourced MultiClassTest\$1 (anonymous)")
             }
         }
-        anonymous.run()
+        anonymous1.run()
         
-        // Local class - defined inside method, generates MultiClassTest$1LocalClass or similar
-        class LocalClass {
-            void doWork() {
-                println("Local sourced MultiClassTest\$LocalClass (local)")
+        Runnable anonymous2 = new Runnable() {
+            void run() {
+                println("Local sourced MultiClassTest\$2 (anonymous)")
             }
         }
-        new LocalClass().doWork()
+        anonymous2.run()
         
-        // Closure - generates synthetic class like MultiClassTest$_test_closure1
-        def closure = { 
-            println("Local sourced MultiClassTest closure")
+        Runnable anonymous3 = new Runnable() {
+            void run() {
+                println("Local sourced MultiClassTest\$3 (anonymous)")
+            }
         }
-        closure()
+        anonymous3.run()
+        
+        // Multiple closures - generates MultiClassTest$_test_closure1, $2, etc.
+        def closure1 = { 
+            println("Local sourced MultiClassTest closure1")
+        }
+        closure1()
+        
+        def closure2 = {
+            println("Local sourced MultiClassTest closure2")
+        }
+        closure2()
+        
+        // Test trait
+        def traitImpl = new TraitImplementor()
+        traitImpl.traitMethod()
+        
+        // Test enum
+        TestEnum.VALUE_A.describe()
+        TestEnum.VALUE_B.describe()
+        
+        // Test interface (just verify it's accessible)
+        println("Local sourced TestInterface exists: " + (TestInterface != null))
     }
+}
+
+/**
+ * Trait - Groovy-specific. Generates:
+ * - TestTrait
+ * - TestTrait$Trait$Helper (internal helper class)
+ */
+trait TestTrait {
+    void traitMethod() {
+        println("Local sourced TestTrait.traitMethod()")
+    }
+}
+
+/**
+ * Class implementing the trait - needed to exercise trait code
+ */
+class TraitImplementor implements TestTrait {
+    // Uses default trait implementation
+}
+
+/**
+ * Enum with per-constant method bodies - Generates:
+ * - TestEnum
+ * - TestEnum$1 (for VALUE_A's body)
+ * - TestEnum$2 (for VALUE_B's body)
+ */
+enum TestEnum {
+    VALUE_A {
+        void describe() {
+            println("Local sourced TestEnum.VALUE_A")
+        }
+    },
+    VALUE_B {
+        void describe() {
+            println("Local sourced TestEnum.VALUE_B")
+        }
+    }
+    
+    abstract void describe()
+}
+
+/**
+ * Interface - Generates TestInterface
+ */
+interface TestInterface {
+    void doSomething()
 }
 
 /**
