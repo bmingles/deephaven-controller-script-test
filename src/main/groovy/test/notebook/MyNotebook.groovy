@@ -22,11 +22,11 @@ static String notebookStaticMethod() {
 }
 
 class NotebookClass {
-    final String value = "Remote: NotebookClass method"
-    
     {
         println("Remote: NotebookClass constructor")
     }
+    
+    final String value = "Remote: NotebookClass method"
     
     String getValue() {
         return value
