@@ -23,7 +23,11 @@ static String notebookStaticMethod() {
 
 class NotebookClass {
     final String value = "Remote: NotebookClass method"
-    println("Remote: NotebookClass constructor")
+    
+    {
+        println("Remote: NotebookClass constructor")
+    }
+    
     String getValue() {
         return value
     }
