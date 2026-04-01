@@ -22,11 +22,11 @@ static String notebookStaticMethod() {
 }
 
 class NotebookClass {
-    final String value = "Local: NotebookClass method"
-    
     {
         println("Local: NotebookClass constructor")
     }
+    
+    final String value = "Local: NotebookClass method"
     
     String getValue() {
         return value
