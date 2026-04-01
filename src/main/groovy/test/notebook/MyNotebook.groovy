@@ -3,30 +3,30 @@ package test.notebook
 return "Notebook"
 
 String notebookVar() {
-  println("Remote: Notebook Level Var")
-  return "Remote: Notebook Level Var"
+  println("Server: Notebook Level Var")
+  return "Server: Notebook Level Var"
 }
 
 String notebookPassedVar(String passedVar) {
-  println("Remote: " + passedVar)
-  return "Remote: " + passedVar
+  println("Server: " + passedVar)
+  return "Server: " + passedVar
 }
 
 String notebookMethod() {
-  println("Remote: notebookMethod")
-  return "Remote: notebookMethod"
+  println("Server: notebookMethod")
+  return "Server: notebookMethod"
 }
 
 static String notebookStaticMethod() {
-    return "Remote: Called static method"
+    return "Server: Called static method"
 }
 
 class NotebookClass {
     {
-        println("Remote: NotebookClass constructor")
+        println("Server: NotebookClass constructor")
     }
     
-    final String value = "Remote: NotebookClass method"
+    final String value = "Server: NotebookClass method"
     
     String getValue() {
         return value
@@ -34,6 +34,6 @@ class NotebookClass {
 }
 
 static String notebookStaticMethodUsingClass() {
-    println("Remote: notebookStaticMethodUsingClass")
+    println("Server: notebookStaticMethodUsingClass")
   new NotebookClass().getValue()
 }
