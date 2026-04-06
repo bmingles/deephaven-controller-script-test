@@ -1,6 +1,7 @@
 {
   "deephaven.mcp.enabled": true,
   "deephaven.enterpriseServers": [
-    "https://bmingles-remote-file-source.int.illumon.com:8123"
+    "https://bmingles-remote-file-source.int.illumon.com:8123",
+    "https://bmingles-remote-file-source2.int.illumon.com:8123"
   ]
 }
